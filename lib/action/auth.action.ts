@@ -2,6 +2,7 @@
 
 import { db,auth } from "@/firebase/admin";
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 const ONE_WEEK=60*60*24*7;
 
 export async function signUp(params: SignUpParams){
@@ -37,18 +38,24 @@ export async function signUp(params: SignUpParams){
         }
     }
 }
-export async function setSessionCookie(idToken:string){
+export async function setSessionCookie(idToken: string) {
     const cookieStore = await cookies();
-    const setSessionCookie=await auth.createSessionCookie(idToken,{
-        expiresIn:ONE_WEEK*1000
-}); 
-    cookieStore.set('session',setSessionCookie,{
-        maxAge:ONE_WEEK,
-        httpOnly: true,
-        secure:process.env.NODE_ENV ==='production',
-        sameSite: 'lax'
-    })
-}
+  
+    // Create session cookie
+    const sessionCookie = await auth.createSessionCookie(idToken, {
+      expiresIn: ONE_WEEK * 1000, // milliseconds
+    });
+    const response = NextResponse.redirect(new URL("/", process.env.NEXT_PUBLIC_BASE_URL));
+    // Set cookie in the browser
+    cookieStore.set("session", sessionCookie, {
+      maxAge: ONE_WEEK,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      sameSite: "lax",
+    });
+    return response;
+  }
 export async function signIn(params:SignInParams){
     const {email,idToken}=params;
     try{
@@ -57,9 +64,9 @@ export async function signIn(params:SignInParams){
             return{
                 success:false,
                 message:'User does not exist.Create a account instead.'
-            }
+            };
         }
-        await setSessionCookie(idToken);
+        return await setSessionCookie(idToken);
 
     }catch(e){
         console.error(e);
@@ -69,27 +76,34 @@ export async function signIn(params:SignInParams){
         }
     }
 }
-export async function getCurrentUser(): Promise< User | null> {
+export async function getCurrentUser(): Promise<User | null> {
     const cookieStore = await cookies();
-    const sessionCookie =cookieStore.get('session')?.value;
-    if(!sessionCookie) return null;
-    try{
-        const decodedClaims= await auth.verifySessionCookie(sessionCookie,true);
-        const userRecord=await db.
-        collection('users')
+  
+    const sessionCookie = cookieStore.get("session")?.value;
+
+    if (!sessionCookie) return null;
+  
+    try {
+      const decodedClaims = await auth.verifySessionCookie(sessionCookie, true);
+
+      // get user info from db
+      const userRecord = await db
+        .collection("users")
         .doc(decodedClaims.uid)
         .get();
-        if(!userRecord.exists) return null;
-        return{
-            ...userRecord.data(),
-            id:userRecord.id,
-        }as User;
-
-    }catch(e){
-        console.log(e)
-        return null;
+      if (!userRecord.exists) return null;
+  
+      return {
+        ...userRecord.data(),
+        id: userRecord.id,
+      } as User;
+    } catch (error) {
+      console.log(error);
+  
+      // Invalid or expired session
+      return null;
     }
-}
+  }
 export async function isAuthenticated(){
     const user =await getCurrentUser();
     return !!user; //!! converts object present into boolean value like [{name:'skrt'}-> to find name present or not  !{}-->false -->!false --->true]
