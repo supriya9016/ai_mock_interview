@@ -35,21 +35,95 @@ Whether you’re preparing for your **dream job**, improving your **communicatio
 
 ## ⚙️ Installation
 
-1. Clone the repository
+1. **Clone the repository**
+   ```bash
    git clone https://github.com/your-username/ai-mock-interview.git
    cd ai-mock-interview
-   
-2.Install dependencies
-  npm install/yarn install
-  
-3.Run locally
-  npm run dev
-  app should now be running at http://localhost:3000
+  ```
+2. **Install dependencies**
 
-🔧 Configuration
--Firebase Setup
-   Create a Firebase project at Firebase Console.
-   Enable Authentication (Email/Password or Google Sign-In).
-   Set up Firestore Database.
-   (Optional) Add Firebase Functions for server-side logic.  
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Run locally**
+
+   ```bash
+   npm run dev
+   ```
+
+   The app will start at 👉 [http://localhost:3000](http://localhost:3000)
+
+
+## 🔧 Configuration
+
+### Firebase Setup
+
+1. Go to [Firebase Console](https://console.firebase.google.com/).
+2. Create a new Firebase project.
+3. Enable **Authentication** (Email/Password or Google).
+4. Set up **Firestore Database** for storing interview sessions.
+5. (Optional) Add **Firebase Functions** for advanced AI/logic handling.
+
+## 🗝️ Environment Variables
+
+Create a `.env.local` file in the root of your project:
+
+```env
+NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+
+AI_API_KEY=your_ai_api_key_here
+```
+
+## 🚀 Usage
+
+1. **Sign up / Log in** → Secure authentication with Firebase.
+2. **Start an interview** → AI generates real-time questions.
+3. **Answer questions** → Receive instant AI-powered structured feedback.
+4. **Track sessions** → View your past interviews and monitor progress.
+
+
+## 📂 Folder Structure
+
+```bash
+ai-mock-interview/
+├── app/                # Next.js App Router pages & routes
+├── components/         # UI components (buttons, cards, modals, etc.)
+├── firebase/           # Firebase initialization & utilities
+├── lib/                # Helpers and utilities
+├── public/             # Static files (icons, images, etc.)
+├── styles/             # Global and module CSS (if any)
+├── .env.local          # Environment variables
+└── README.md           # Documentation
+```
+
+
+## 🤝 Contributing
+
+We love contributions! 💡
+Here’s how you can help:
+1. Fork the repo
+2. Create a new branch (`feature/your-feature`)
+3. Make your changes
+4. Commit and push
+5. Open a Pull Request 🚀
+
+## 🔮 Future Roadmap
+
+* 🎙️ Voice-based interviews (speech-to-text + AI evaluation)
+* 📊 Analytics dashboard for tracking growth
+* 🧩 Custom interview tracks (Backend, Frontend, Behavioral, etc.)
+* 🌍 Multi-language support
+
+## 📜 License
+
+This project is licensed under the [MIT License](LICENSE).
+
 
