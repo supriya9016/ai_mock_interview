@@ -38,7 +38,18 @@ Whether you’re preparing for your **dream job**, improving your **communicatio
 1. Clone the repository
    git clone https://github.com/your-username/ai-mock-interview.git
    cd ai-mock-interview
+   
 2.Install dependencies
   npm install/yarn install
+  
 3.Run locally
   npm run dev
+  app should now be running at http://localhost:3000
+
+🔧 Configuration
+-Firebase Setup
+   Create a Firebase project at Firebase Console.
+   Enable Authentication (Email/Password or Google Sign-In).
+   Set up Firestore Database.
+   (Optional) Add Firebase Functions for server-side logic.  
+
