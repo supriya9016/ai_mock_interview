@@ -24,6 +24,7 @@ export async function signUp(params: SignUpParams) {
     return {
       success: true,
       message: "Account created successfully. Please sign in.",
+      
     };
   } catch (e: any) {
     console.error("Error creating user:", e);
@@ -120,3 +121,37 @@ export async function isAuthenticated() {
   const user = await getCurrentUser();
   return !!user;
 }
+// 6.
+export async function getInterviewsByUserId(userId: string): Promise<Interview[] | null> {
+  const interviews = await db
+  .collection('interviews')
+  .where('userId','==',userId)
+  .orderBy('createdAt','desc')
+  .get();
+
+  return interviews.docs.map((doc)=> ({
+    id: doc.id,
+    ...doc.data()
+  }))as Interview[];
+
+}
+//7.
+export async function getLatestInterviews(params:GetLatestInterviewsParams): Promise<Interview[] | null> {
+  const{ userId,limit=20}=params;
+  const interviews = await db
+  .collection('interviews')
+  .orderBy('createdAt','desc')
+  .where('finalized','==',true)
+  .where('userId','!=',userId)
+  .limit(limit)
+  .get();
+
+  return interviews.docs.map((doc)=> ({
+    id: doc.id,
+    ...doc.data()
+  }))as Interview[];
+
+}
+
+ 
+
