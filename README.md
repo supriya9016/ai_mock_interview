@@ -69,7 +69,7 @@ Whether you’re preparing for your **dream job**, improving your **communicatio
 
 ## 🗝️ Environment Variables
 
-Create a `.env.local` file in the root of your project:
+Create a `.env.local` file in the root of your project
 
 ```env
 NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
