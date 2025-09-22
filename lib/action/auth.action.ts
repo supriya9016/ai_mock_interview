@@ -19,7 +19,7 @@ export async function signUp(params: SignUpParams) {
       };
     }
 
-    await db.collection("users").doc(uid).set({ name, email }); // ✅ Fix collection name to 'users'
+    await db.collection("users").doc(uid).set({ name, email });
 
     return {
       success: true,
@@ -43,24 +43,8 @@ export async function signUp(params: SignUpParams) {
   }
 }
 
-// ✅ 2. Set Session Cookie
-export async function setSessionCookie(idToken: string) {
-  const cookieStore = await cookies();
 
-  const sessionCookie = await auth.createSessionCookie(idToken, {
-    expiresIn: ONE_WEEK * 1000, // milliseconds
-  });
-
-  cookieStore.set("session", sessionCookie, {
-    maxAge: ONE_WEEK,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    sameSite: "lax",
-  });
-}
-
-// ✅ 3. Sign In (just return success)
+// ✅ 2. Sign In (just return success)
 export async function signIn(params: SignInParams) {
   const { email, idToken } = params;
 
@@ -88,6 +72,23 @@ export async function signIn(params: SignInParams) {
     };
   }
 }
+// ✅ 3. Set Session Cookie
+export async function setSessionCookie(idToken: string) {
+  const cookieStore = await cookies();
+
+  const sessionCookie = await auth.createSessionCookie(idToken, {
+    expiresIn: ONE_WEEK * 1000, // milliseconds
+  });
+
+  cookieStore.set("session", sessionCookie, {
+    maxAge: ONE_WEEK,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    sameSite: "lax",
+  });
+}
+
 
 // ✅ 4. Get Current User
 export async function getCurrentUser(): Promise<User | null> {

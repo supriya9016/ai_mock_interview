@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { redirect } from "next/navigation";
 import React from 'react'
 import Image from 'next/image'
 import { dummyInterviews } from '@/constants'
@@ -8,6 +9,9 @@ import { getCurrentUser, getInterviewsByUserId, getLatestInterviews } from '@/li
 
 const page = async() => {
   const user=await getCurrentUser();
+  if (!user) {
+    redirect("/sign-up");
+  }
   const[userInterviews,latestInterviews] = await Promise.all([
     await getInterviewsByUserId(user?.id!),
     await getLatestInterviews({userId: user?.id!})
